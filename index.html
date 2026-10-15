@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-FLIX | Plataforma de K-Dramas Flor de Cerezo</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+KR:wght@600;900&family=Orbitron:wght@600;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Montserrat:wght@700;900&family=Sacramento&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cherry-red: #E63956;
+            --cherry-pink: #FF5E7E;
+            --cherry-soft: #FFB7C5;
+            --cherry-glow: rgba(255, 94, 126, 0.4);
+            --night-bg: #120b13;
+            --card-bg: rgba(28, 16, 29, 0.7);
+        }
+
+        /* Unique Drama Typography Styles */
+        .font-queen { font-family: 'Cinzel', serif; letter-spacing: 1px; }
+        .font-weak { font-family: 'Orbitron', sans-serif; letter-spacing: 1.5px; }
+        .font-lab { font-family: 'Playfair Display', serif; font-style: italic; }
+        .font-king { font-family: 'Montserrat', sans-serif; letter-spacing: 2px; }
+        .font-wonder { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
+        .font-korea { font-family: 'Noto Serif KR', serif; }
+        .font-sakura { font-family: 'Sacramento', cursive; }
+
+        body {
+            background-color: var(--night-bg);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            transition: background 0.8s ease-in-out;
+        }
+
+        /* Glassmorphic elements with Cherry Glow */
+        .glass-header {
+            background: rgba(18, 11, 19, 0.82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 183, 197, 0.15);
+        }
+
+        .glass-panel {
+            background: rgba(25, 15, 27, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 183, 197, 0.2);
+        }
+
+        .glass-card {
+            background: rgba(32, 18, 35, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Dynamic Themes per K-Drama */
+        body[data-theme="queen"] {
+            --accent-color: #f1c40f;
+            --glow-color: rgba(241, 196, 15, 0.5);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #2a1b2e 0%, #120b13 85%);
+        }
+        body[data-theme="weak"] {
+            --accent-color: #00f0ff;
+            --glow-color: rgba(0, 240, 255, 0.5);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #152736 0%, #0d1218 85%);
+        }
+        body[data-theme="lab"] {
+            --accent-color: #ff5e7e;
+            --glow-color: rgba(255, 94, 126, 0.5);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #3d1728 0%, #120b13 85%);
+        }
+        body[data-theme="king"] {
+            --accent-color: #e67e22;
+            --glow-color: rgba(230, 126, 34, 0.5);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #3a2211 0%, #120b13 85%);
+        }
+        body[data-theme="wonder"] {
+            --accent-color: #b066fe;
+            --glow-color: rgba(176, 102, 254, 0.5);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #28163b 0%, #120b13 85%);
+        }
+
+        .dynamic-bg {
+            background: var(--bg-gradient, radial-gradient(circle at 50% 30%, #2a1b2e 0%, #120b13 85%));
+            transition: background 0.8s ease-in-out;
+        }
+
+        /* Title Neon Effects */
+        .title-queen {
+            color: #ffeaa7;
+            text-shadow: 0 0 18px rgba(241, 196, 15, 0.7), 0 2px 4px rgba(0,0,0,0.9);
+        }
+        .title-weak {
+            color: #00f0ff;
+            text-shadow: 0 0 18px rgba(0, 240, 255, 0.8), -2px 2px 0px #ff0055;
+        }
+        .title-lab {
+            color: #ffb7c5;
+            text-shadow: 0 0 18px rgba(255, 183, 197, 0.8), 0 0 30px rgba(255, 94, 126, 0.5);
+        }
+        .title-king {
+            color: #f39c12;
+            text-shadow: 0 0 22px rgba(243, 156, 18, 0.8), 0 3px 8px rgba(0,0,0,0.9);
+        }
+        .title-wonder {
+            color: #d8b4fe;
+            text-shadow: 0 0 20px rgba(216, 180, 254, 0.8), 0 0 35px rgba(176, 102, 254, 0.5);
+        }
+
+        /* Custom Logo K-Styling */
+        .k-logo-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 48px;
+        }
+        .k-logo-text {
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 900;
+            font-size: 2.3rem;
+            background: linear-gradient(135deg, #FFB7C5 0%, #FF5E7E 50%, #E63956 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(230, 57, 86, 0.7));
+            line-height: 1;
+        }
+        .k-logo-petal {
+            position: absolute;
+            top: 2px;
+            right: 0px;
+            color: #FFB7C5;
+            font-size: 11px;
+            animation: pulsePetal 2s infinite ease-in-out;
+        }
+
+        @keyframes pulsePetal {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+            50% { transform: scale(1.25) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 6px #FF5E7E); }
+        }
+
+        /* Floating Sakura Petals Animation Container */
+        #sakura-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .sakura-petal {
+            position: absolute;
+            background: linear-gradient(135deg, #ffb7c5, #ff5e7e);
+            border-radius: 15px 0px 15px 0px;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: fall linear infinite, sway ease-in-out infinite alternate;
+        }
+
+        @keyframes fall {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        @keyframes sway {
+            0% { transform: translateX(0px) rotate(0deg); }
+            100% { transform: translateX(80px) rotate(360deg); }
+        }
+
+        /* Card Hover Effects */
+        .drama-card {
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .drama-card:hover, .drama-card.active-card {
+            transform: translateY(-8px) scale(1.03);
+            border-color: var(--accent-color, #ff5e7e);
+            box-shadow: 0 12px 30px -5px var(--glow-color, rgba(255, 94, 126, 0.5));
+        }
+
+        .active-indicator {
+            background-color: var(--accent-color, #ff5e7e);
+            box-shadow: 0 0 12px var(--accent-color, #ff5e7e);
+        }
+
+        /* Progress Bar for Autoplay */
+        .progress-bar-inner {
+            background: linear-gradient(90deg, #ff5e7e, #e63956, #f1c40f);
+            transition: width 0.1s linear;
+        }
+
+        /* Scrollbar styles */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+
+<body data-theme="queen" class="dynamic-bg min-h-screen flex flex-col justify-between selection:bg-pink-600 selection:text-white relative">
+
+    <div id="sakura-container"></div>
+
+    <header class="fixed top-0 left-0 right-0 z-40 glass-header px-4 md:px-8 py-3 flex items-center justify-between transition-all duration-300">
+        <div class="flex items-center gap-6 md:gap-10">
+            <!-- Cherry K Logo -->
+            <div class="flex items-center gap-2 cursor-pointer group" onclick="setActiveDrama(0)">
+                <div class="k-logo-container">
+                    <span class="k-logo-text">K</span>
+                    <i class="fas fa-spa k-logo-petal"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-wider text-white font-korea leading-none group-hover:text-pink-300 transition">K-FLIX</span>
+                    <span class="text-[9px] uppercase tracking-widest text-pink-300/80 font-semibold font-sakura text-sm -mt-1">Cherry Blossom</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-medium text-gray-300">
+                <a href="#" class="text-white font-semibold border-b-2 border-pink-500 pb-0.5 flex items-center gap-1.5">
+                    <i class="fas fa-home text-xs text-pink-400"></i> Inicio
+                </a>
+                <a href="#" class="hover:text-pink-300 transition">Dramas Coreanos</a>
+                <a href="#" class="hover:text-pink-300 transition">Flor de Cerezo Specials</a>
+                <a href="#" class="hover:text-pink-300 transition">Populares</a>
+                <a href="#" class="hover:text-pink-300 transition">Mi Lista</a>
+            </nav>
+        </div>
+
+        <!-- Search Bar & Autoplay Toggle Controls -->
+        <div class="flex items-center gap-3">
+            <div class="relative hidden sm:block">
+                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Buscar k-drama, actor..." 
+                       class="bg-black/40 border border-pink-500/30 text-xs rounded-full pl-8 pr-4 py-1.5 text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 w-36 md:w-52 transition-all">
+                <i class="fas fa-search absolute left-3 top-2.5 text-xs text-pink-400"></i>
+            </div>
+
+            <div id="autoplay-badge" class="flex items-center gap-2 text-xs bg-black/50 border border-pink-500/30 px-3 py-1 rounded-full text-pink-200">
+                <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
+                <span id="autoplay-text" class="hidden md:inline">Ciclo Activo</span>
+            </div>
+
+            <button id="toggle-autoplay-btn" onclick="toggleAutoplay()" title="Alternar avance automático" class="hover:bg-pink-500/20 text-pink-300 transition p-2 text-xs bg-black/40 rounded-full border border-pink-500/30 w-8 h-8 flex items-center justify-center">
+                <i id="autoplay-icon" class="fas fa-pause"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="pt-20 pb-12 px-4 md:px-12 flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full relative z-10">
+        
+        <!-- Hero Stage Card -->
+        <div class="relative rounded-3xl overflow-hidden mb-8 border border-pink-500/20 glass-panel shadow-2xl">
+            <div class="relative h-80 md:h-[420px] w-full overflow-hidden">
+                <img id="hero-banner-img" src="" alt="K-Drama Banner" class="w-full h-full object-cover transition-all duration-700">
+                
+                <!-- Gradient overlays with cherry dark tint -->
+                <div class="absolute inset-0 bg-gradient-to-t from-[#120b13] via-[#120b13]/60 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-[#120b13] via-[#120b13]/50 to-transparent"></div>
+                
+                <!-- Content Area -->
+                <div class="absolute bottom-6 left-6 right-6 md:left-10 md:bottom-10 max-w-2xl z-10">
+                    <div class="flex items-center gap-2 text-xs font-bold tracking-widest text-pink-300 uppercase mb-2">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full active-indicator"></span>
+                        <span id="hero-genre">Romance & Drama Real</span>
+                        <span class="text-gray-400">•</span>
+                        <span id="hero-match" class="text-green-400">98% Coincidencia</span>
+                    </div>
+
+                    <h1 id="hero-title" class="text-3xl md:text-5xl font-extrabold tracking-tight transition-all duration-500 mb-2">
+                        Cargando Drama...
+                    </h1>
+
+                    <p id="hero-tagline" class="text-xs md:text-sm text-gray-200 line-clamp-3 leading-relaxed mb-5 max-w-xl">
+                        Descripción del drama destacado...
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button id="hero-play-btn" onclick="openActiveModal()" class="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-pink-600/30 flex items-center gap-2 text-xs md:text-sm">
+                            <i class="fas fa-play text-white"></i> Ver Ahora
+                        </button>
+                        <button onclick="openActiveModal()" class="px-5 py-2.5 glass-panel rounded-xl hover:bg-white/10 transition-all text-xs md:text-sm font-semibold flex items-center gap-2 text-gray-200 border border-pink-400/30">
+                            <i class="fas fa-info-circle text-pink-400"></i> Más Detalles
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar Indicator for Automatic Slide Transition -->
+            <div class="w-full h-1.5 bg-black/40">
+                <div id="progress-bar" class="h-full progress-bar-inner w-0"></div>
+            </div>
+        </div>
+
+        <!-- Carousel Title and Manual Controls -->
+        <div class="flex items-center justify-between mb-4 px-1">
+            <div class="flex items-center gap-3">
+                <h2 class="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <i class="fas fa-spa text-pink-500"></i> Colección Flor de Cerezo
+                </h2>
+                <span class="text-xs text-pink-300/70 font-normal hidden sm:inline">(Pasa el mouse para pausar la rotación)</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="manualPrev()" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-pink-200 hover:bg-pink-500/20 active:scale-95 transition border border-pink-500/30">
+                    <i class="fas fa-chevron-left text-sm"></i>
+                </button>
+                <button onclick="manualNext()" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-pink-200 hover:bg-pink-500/20 active:scale-95 transition border border-pink-500/30">
+                    <i class="fas fa-chevron-right text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="carousel-container" class="relative py-2" onmouseenter="pauseAutoplay()" onmouseleave="resumeAutoplay()">
+            <div id="carousel-track" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-1 cursor-grab active:cursor-grabbing">
+                <!-- Cards injected dynamically in JavaScript -->
+            </div>
+        </div>
+
+        <!-- Additional Section: Trending K-Dramas Row -->
+        <div class="mt-8">
+            <h3 class="text-lg font-bold text-gray-200 mb-3 flex items-center gap-2">
+                <i class="fas fa-fire text-amber-400 text-sm"></i> Tendencia en Corea este mes
+            </h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                <div onclick="selectAndOpen(0)" class="glass-card p-2 rounded-xl border border-pink-500/20 hover:border-pink-500 transition cursor-pointer text-center group">
+                    <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80" alt="Drama 1" class="w-full h-32 object-cover rounded-lg mb-2 group-hover:scale-105 transition">
+                    <span class="text-xs font-semibold text-gray-200 block truncate">La reina de las lágrimas</span>
+                    <span class="text-[10px] text-pink-400">16 Episodios</span>
+                </div>
+                <div onclick="selectAndOpen(1)" class="glass-card p-2 rounded-xl border border-pink-500/20 hover:border-pink-500 transition cursor-pointer text-center group">
+                    <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80" alt="Drama 2" class="w-full h-32 object-cover rounded-lg mb-2 group-hover:scale-105 transition">
+                    <span class="text-xs font-semibold text-gray-200 block truncate">Héroe débil</span>
+                    <span class="text-[10px] text-cyan-400">8 Episodios</span>
+                </div>
+                <div onclick="selectAndOpen(2)" class="glass-card p-2 rounded-xl border border-pink-500/20 hover:border-pink-500 transition cursor-pointer text-center group">
+                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=400&q=80" alt="Drama 3" class="w-full h-32 object-cover rounded-lg mb-2 group-hover:scale-105 transition">
+                    <span class="text-xs font-semibold text-gray-200 block truncate">Amor en el laboratorio</span>
+                    <span class="text-[10px] text-pink-300">16 Episodios</span>
+                </div>
+                <div onclick="selectAndOpen(3)" class="glass-card p-2 rounded-xl border border-pink-500/20 hover:border-pink-500 transition cursor-pointer text-center group">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80" alt="Drama 4" class="w-full h-32 object-cover rounded-lg mb-2 group-hover:scale-105 transition">
+                    <span class="text-xs font-semibold text-gray-200 block truncate">King the Land</span>
+                    <span class="text-[10px] text-amber-400">16 Episodios</span>
+                </div>
+                <div onclick="selectAndOpen(4)" class="glass-card p-2 rounded-xl border border-pink-500/20 hover:border-pink-500 transition cursor-pointer text-center group">
+                    <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=400&q=80" alt="Drama 5" class="w-full h-32 object-cover rounded-lg mb-2 group-hover:scale-105 transition">
+                    <span class="text-xs font-semibold text-gray-200 block truncate">Wonderland</span>
+                    <span class="text-[10px] text-purple-400">Película HD</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="drama-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="modal-container" class="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-panel rounded-3xl border border-pink-500/30 text-white shadow-2xl transform scale-95 transition-transform duration-300 no-scrollbar">
+            
+            <!-- Close Modal Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/70 hover:bg-pink-600 text-white flex items-center justify-center transition border border-white/20">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+
+            <!-- Modal Banner Header -->
+            <div class="relative h-64 md:h-80 w-full overflow-hidden">
+                <img id="modal-banner" src="" alt="Modal Banner" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#120b13] via-[#120b13]/50 to-transparent"></div>
+                
+                <div class="absolute bottom-6 left-6 right-6 flex flex-col gap-2">
+                    <span id="modal-badge" class="self-start text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow">
+                        Drama Destacado
+                    </span>
+                    <h2 id="modal-title" class="text-2xl md:text-4xl font-extrabold tracking-tight">
+                        Título del Drama
+                    </h2>
+                    
+                    <div class="flex flex-wrap items-center gap-3 pt-2">
+                        <button onclick="simulatePlay()" class="px-5 py-2 bg-gradient-to-r from-pink-500 to-rose-600 text-white font-bold rounded-lg hover:from-pink-600 hover:to-rose-700 transition flex items-center gap-2 text-xs md:text-sm shadow-md shadow-pink-600/30">
+                            <i class="fas fa-play text-white"></i> Reproducir Tráiler
+                        </button>
+                        <button class="p-2 glass-panel rounded-lg hover:bg-white/20 transition text-xs border border-pink-400/30">
+                            <i class="fas fa-plus text-pink-300"></i>
+                        </button>
+                        <button class="p-2 glass-panel rounded-lg hover:bg-white/20 transition text-xs border border-pink-400/30">
+                            <i class="fas fa-heart text-pink-400"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Content Section -->
+            <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 space-y-3">
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-gray-300">
+                        <span id="modal-match" class="text-green-400 font-bold">98% Coincidencia</span>
+                        <span id="modal-year" class="text-gray-400">2024</span>
+                        <span id="modal-age" class="border border-pink-400/40 text-pink-300 text-[10px] px-2 py-0.5 rounded">16+</span>
+                        <span id="modal-episodes" class="text-gray-300 font-medium">16 Episodios</span>
+                        <span class="bg-pink-950/60 text-pink-300 border border-pink-500/30 text-[10px] px-2 py-0.5 rounded">Ultra HD 4K</span>
+                    </div>
+
+                    <p id="modal-description" class="text-gray-200 text-xs md:text-sm leading-relaxed">
+                        Cargando información del drama...
+                    </p>
+
+                    <!-- Video Player Simulation Container -->
+                    <div id="video-player-container" class="hidden mt-4 rounded-xl overflow-hidden border border-pink-500/30 bg-black p-3 text-center">
+                        <div class="relative pt-[56.25%] bg-zinc-950 rounded-lg flex items-center justify-center overflow-hidden border border-white/10">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-pink-950/40 to-black">
+                                <i class="fas fa-circle-notch fa-spin text-3xl text-pink-500"></i>
+                                <span class="text-xs text-pink-200 font-semibold">Cargando reproductor simulado K-FLIX...</span>
+                                <span class="text-[10px] text-gray-400">(Tráiler simulado con controles de reproductor activos)</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-3 px-2 text-xs text-gray-300">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-pause cursor-pointer hover:text-pink-400"></i>
+                                <i class="fas fa-volume-up cursor-pointer hover:text-pink-400"></i>
+                                <span>0:42 / 2:15</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-cog cursor-pointer hover:text-pink-400"></i>
+                                <i class="fas fa-expand cursor-pointer hover:text-pink-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cast and Extra Details Sidebar -->
+                <div class="space-y-3 text-xs border-t md:border-t-0 md:border-l border-pink-500/20 pt-4 md:pt-0 md:pl-5">
+                    <div>
+                        <span class="text-pink-300/70 block font-semibold mb-0.5">Elenco principal:</span>
+                        <span id="modal-cast" class="text-gray-200 font-medium leading-snug">Actor 1, Actor 2</span>
+                    </div>
+                    <div>
+                        <span class="text-pink-300/70 block font-semibold mb-0.5">Géneros:</span>
+                        <span id="modal-genres" class="text-gray-200 font-medium">Romance, Drama</span>
+                    </div>
+                    <div>
+                        <span class="text-pink-300/70 block font-semibold mb-0.5">Atmósfera:</span>
+                        <span id="modal-vibe" class="text-gray-200 font-medium">Emotivo, Cerezos, Lujoso</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-header py-4 px-6 text-center text-xs text-pink-200/60 border-t border-pink-500/20 mt-8 relative z-10">
+        <div class="flex items-center justify-center gap-2 mb-1">
+            <span class="k-logo-text text-sm">K</span>
+            <span class="font-korea font-bold text-white">K-FLIX</span>
+            <span>• Temática Flor de Cerezo</span>
+        </div>
+        <p>© 2026 K-FLIX Platform. Todos los derechos reservados. Carrusel continuo e interactivo de K-Dramas.</p>
+    </footer>
+
+    <script>
+        // Master K-Drama Data Array
+        const dramasData = [
+            {
+                key: "queen",
+                title: "La reina de las lágrimas",
+                tagline: "Un milagro de amor renace cuando el matrimonio más poderoso de Corea enfrenta su mayor prueba.",
+                genre: "Romance & Drama Real",
+                fontClass: "font-queen",
+                titleClass: "title-queen",
+                match: "98% Coincidencia",
+                year: "2024",
+                age: "16+",
+                episodes: "16 Episodios",
+                poster: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80",
+                banner: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1600&q=80",
+                description: "Hong Hae-in, la fría heredera de los grandes almacenes Queens Group, y Baek Hyun-woo, el virtuoso director legal criado en un pueblo rural, celebran la boda del siglo. Tres años después, sumergidos en una abrumadora presión familiar y distancia emocional, Hyun-woo decide divorciarse, pero un giro médico drástico cambia el rumbo de sus vidas.",
+                cast: "Kim Soo-hyun, Kim Ji-won, Park Sung-hoon, Kwak Dong-yeon",
+                genres: "Drama Romántico, Melodrama, Negocios",
+                vibe: "Lujoso, Elegante, Emotivo"
+            },
+            {
+                key: "weak",
+                title: "Héroe débil",
+                tagline: "La inteligencia táctica y la física son las armas más letales contra la violencia escolar.",
+                genre: "Acción & Suspenso Escolar",
+                fontClass: "font-weak",
+                titleClass: "title-weak",
+                match: "99% Coincidencia",
+                year: "2022",
+                age: "18+",
+                episodes: "8 Episodios",
+                poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80",
+                banner: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1600&q=80",
+                description: "Yeon Si-eun es un estudiante modelo en el 1% superior del instituto, obsesionado únicamente con sus calificaciones. Físicamente débil, se convierte en el blanco perfecto de los matones. Sin embargo, usando la física, la psicología táctica y objetos cotidianos, Si-eun contraataca ferozmente junto a nuevos amigos inesperados.",
+                cast: "Park Ji-hoon, Choi Hyun-wook, Hong Kyung, Shin Seung-ho",
+                genres: "Acción, Drama Juvenil, Thriller",
+                vibe: "Oscuro, Urbano, Neón, Intenso"
+            },
+            {
+                key: "lab",
+                title: "Amor en el laboratorio",
+                tagline: "En las fórmulas del corazón y el amor, las cláusulas de un contrato nunca son suficientes.",
+                genre: "Comedia Romántica",
+                fontClass: "font-lab",
+                titleClass: "title-lab",
+                match: "95% Coincidencia",
+                year: "2022",
+                age: "13+",
+                episodes: "16 Episodios",
+                poster: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80",
+                banner: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1600&q=80",
+                description: "Choi Sang-eun es una experta 'asistente de vida matrimonial' que transforma la vida de solteros codiciados ofreciendo un matrimonio de conveniencia impecable. Su corazón se divide peligrosamente cuando firma un contrato exclusivo de largo plazo para los lunes, miércoles y viernes con un cliente misterioso, y los martes, jueves y sábados con un famoso actor.",
+                cast: "Park Min-young, Go Kyung-pyo, Kim Jae-young",
+                genres: "Comedia Romántica, Drama",
+                vibe: "Cálido, Pastel, Elegante"
+            },
+            {
+                key: "king",
+                title: "King the Land",
+                tagline: "Donde la sonrisa radiante de una hotelera desafía al poderoso heredero que aborrece lo falso.",
+                genre: "Romance de Lujo",
+                fontClass: "font-king",
+                titleClass: "title-king",
+                match: "97% Coincidencia",
+                year: "2023",
+                age: "13+",
+                episodes: "16 Episodios",
+                poster: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+                banner: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80",
+                description: "Goo Won es el heredero del conglomerado The King Group, metido de lleno en una batalla por la sucesión. Odia profundamente las sonrisas fingidas. Cheon Sa-rang es una empleada estrella caracterizada por su calidez radiante. En el exclusivo lounge de lujo 'King the Land', sus visiones opuestas del mundo chocan e inician un romance estelar.",
+                cast: "Lee Jun-ho, Im Yoon-ah (Yoona), Go Won-hee, Kim Ga-eun",
+                genres: "Comedia Romántica, Hospitalidad",
+                vibe: "Dorado, Lujoso, Glamuroso"
+            },
+            {
+                key: "wonder",
+                title: "Wonderland",
+                tagline: "Una Inteligencia Artificial que revive a tus seres queridos para una última videollamada.",
+                genre: "Ciencia Ficción & Romance",
+                fontClass: "font-wonder",
+                titleClass: "title-wonder",
+                match: "96% Coincidencia",
+                year: "2024",
+                age: "13+",
+                episodes: "Película (1h 53m)",
+                poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80",
+                banner: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1600&q=80",
+                description: "Wonderland es un entorno simulado por IA que reconstruye la mente, voz y personalidad de personas fallecidas o en coma para que sus seres queridos puedan continuar interactuando con ellos por videollamada. Una azafata se reconecta con su novio en coma en el espacio, mientras un padre busca sanar el dolor de su hija.",
+                cast: "Tang Wei, Suzy, Park Bo-gum, Jung Yu-mi, Choi Woo-shik",
+                genres: "Ciencia Ficción, Drama, Emotivo",
+                vibe: "Místico, Futurista, Etéreo"
+            }
+        ];
+
+        let currentIndex = 0;
+        let isAutoplayActive = true;
+        let progressInterval = null;
+        let progressPercent = 0;
+        const CYCLE_DURATION = 4500; // 4.5 seconds per slide
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSakuraPetals();
+            renderCarouselCards();
+            setActiveDrama(0);
+            startAutoplay();
+        });
+
+        // Floating Sakura Petals Generator
+        function renderSakuraPetals() {
+            const container = document.getElementById('sakura-container');
+            const petalCount = 18; // Optimal count for smooth performance
+
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'sakura-petal';
+                
+                // Randomize sizes and speeds
+                const size = Math.random() * 12 + 8; // 8px to 20px
+                const leftPosition = Math.random() * 100; // 0% to 100%
+                const fallDuration = Math.random() * 8 + 6; // 6s to 14s
+                const swayDuration = Math.random() * 3 + 2; // 2s to 5s
+                const delay = Math.random() * 5;
+
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${leftPosition}%`;
+                petal.style.animationDuration = `${fallDuration}s, ${swayDuration}s`;
+                petal.style.animationDelay = `${delay}s`;
+
+                container.appendChild(petal);
+            }
+        }
+
+        // Render Carousel Cards Dynamically
+        function renderCarouselCards() {
+            const track = document.getElementById('carousel-track');
+            track.innerHTML = '';
+
+            dramasData.forEach((drama, index) => {
+                const card = document.createElement('div');
+                card.className = `drama-card flex-none w-64 md:w-72 rounded-2xl overflow-hidden glass-card border border-pink-500/20 cursor-pointer relative group`;
+                card.setAttribute('data-index', index);
+                card.onclick = () => selectAndOpen(index);
+                card.onmouseenter = () => setActiveDrama(index);
+
+                card.innerHTML = `
+                    <div class="relative h-80 md:h-96 overflow-hidden">
+                        <img src="${drama.poster}" alt="${drama.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#120b13] via-[#120b13]/20 to-transparent"></div>
+                        <div class="absolute top-3 left-3 bg-pink-950/80 backdrop-blur-md text-pink-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-pink-400/30 flex items-center gap-1">
+                            <i class="fas fa-spa text-[9px]"></i> K-Flix
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3">
+                            <span class="text-[10px] font-bold text-pink-300 uppercase tracking-wider block">${drama.genre}</span>
+                            <h3 class="text-xl font-bold leading-tight mt-0.5 ${drama.fontClass} ${drama.titleClass}">${drama.title}</h3>
+                        </div>
+                    </div>
+                    <div class="p-3.5 bg-black/40">
+                        <div class="flex items-center gap-2 text-[11px] font-medium text-gray-300 mb-1">
+                            <span class="text-green-400 font-bold">${drama.match}</span>
+                            <span class="border border-pink-500/30 text-pink-300 px-1.5 py-0.2 rounded text-[9px]">${drama.age}</span>
+                            <span>${drama.year}</span>
+                        </div>
+                        <p class="text-xs text-gray-300 line-clamp-2 leading-snug">
+                            ${drama.tagline}
+                        </p>
+                    </div>
+                `;
+                track.appendChild(card);
+            });
+        }
+
+        // Set Active Drama Theme, Banner and Focus
+        function setActiveDrama(index) {
+            currentIndex = index;
+            const drama = dramasData[index];
+            if (!drama) return;
+
+            // Change body theme attribute
+            document.body.setAttribute('data-theme', drama.key);
+
+            // Update Hero Banner Elements
+            const heroImg = document.getElementById('hero-banner-img');
+            const heroTitle = document.getElementById('hero-title');
+            const heroTagline = document.getElementById('hero-tagline');
+            const heroGenre = document.getElementById('hero-genre');
+            const heroMatch = document.getElementById('hero-match');
+
+            heroImg.src = drama.banner;
+            heroTitle.innerText = drama.title;
+            heroTitle.className = `text-3xl md:text-5xl font-extrabold tracking-tight transition-all duration-500 mb-2 ${drama.fontClass} ${drama.titleClass}`;
+            heroTagline.innerText = drama.tagline;
+            heroGenre.innerText = drama.genre;
+            heroMatch.innerText = drama.match;
+
+            // Update Active Card Visual Highlight
+            const cards = document.querySelectorAll('.drama-card');
+            cards.forEach((card, idx) => {
+                if (idx === index) {
+                    card.classList.add('active-card');
+                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } else {
+                    card.classList.remove('active-card');
+                }
+            });
+
+            resetProgressBar();
+        }
+
+        // Carousel Next / Prev
+        function nextDrama() {
+            let nextIdx = (currentIndex + 1) % dramasData.length;
+            setActiveDrama(nextIdx);
+        }
+
+        function prevDrama() {
+            let prevIdx = (currentIndex - 1 + dramasData.length) % dramasData.length;
+            setActiveDrama(prevIdx);
+        }
+
+        function manualNext() {
+            nextDrama();
+            if (isAutoplayActive) startAutoplay();
+        }
+
+        function manualPrev() {
+            prevDrama();
+            if (isAutoplayActive) startAutoplay();
+        }
+
+        // Autoplay Logic
+        function startAutoplay() {
+            stopAutoplay();
+            isAutoplayActive = true;
+            updateAutoplayUI();
+
+            progressPercent = 0;
+            const intervalStep = 50; 
+            const increment = (intervalStep / CYCLE_DURATION) * 100;
+
+            progressInterval = setInterval(() => {
+                progressPercent += increment;
+                const progressBar = document.getElementById('progress-bar');
+                if (progressBar) progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
+
+                if (progressPercent >= 100) {
+                    progressPercent = 0;
+                    nextDrama();
+                }
+            }, intervalStep);
+        }
+
+        function stopAutoplay() {
+            if (progressInterval) clearInterval(progressInterval);
+            resetProgressBar();
+        }
+
+        function pauseAutoplay() {
+            if (isAutoplayActive) {
+                stopAutoplay();
+                document.getElementById('autoplay-text').innerText = "Pausado (Hover)";
+            }
+        }
+
+        function resumeAutoplay() {
+            if (isAutoplayActive) {
+                startAutoplay();
+                document.getElementById('autoplay-text').innerText = "Ciclo Activo";
+            }
+        }
+
+        function toggleAutoplay() {
+            isAutoplayActive = !isAutoplayActive;
+            if (isAutoplayActive) {
+                startAutoplay();
+            } else {
+                stopAutoplay();
+                updateAutoplayUI();
+            }
+        }
+
+        function updateAutoplayUI() {
+            const badge = document.getElementById('autoplay-badge');
+            const text = document.getElementById('autoplay-text');
+            const icon = document.getElementById('autoplay-icon');
+
+            if (isAutoplayActive) {
+                badge.className = "flex items-center gap-2 text-xs bg-pink-950/60 border border-pink-500/40 px-3 py-1 rounded-full text-pink-200";
+                text.innerText = "Ciclo Activo";
+                icon.className = "fas fa-pause text-pink-300";
+            } else {
+                badge.className = "flex items-center gap-2 text-xs bg-red-950/60 border border-red-500/40 px-3 py-1 rounded-full text-red-300";
+                text.innerText = "Ciclo Pausado";
+                icon.className = "fas fa-play text-red-400";
+            }
+        }
+
+        function resetProgressBar() {
+            progressPercent = 0;
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) progressBar.style.width = '0%';
+        }
+
+        // Modal Controls
+        function openModal(index) {
+            pauseAutoplay();
+            const drama = dramasData[index];
+            if (!drama) return;
+
+            document.getElementById('modal-banner').src = drama.banner;
+            document.getElementById('modal-title').innerText = drama.title;
+            document.getElementById('modal-title').className = `text-2xl md:text-4xl font-extrabold tracking-tight ${drama.fontClass} ${drama.titleClass}`;
+            document.getElementById('modal-badge').innerText = drama.genre;
+            document.getElementById('modal-match').innerText = drama.match;
+            document.getElementById('modal-year').innerText = drama.year;
+            document.getElementById('modal-age').innerText = drama.age;
+            document.getElementById('modal-episodes').innerText = drama.episodes;
+            document.getElementById('modal-description').innerText = drama.description;
+            document.getElementById('modal-cast').innerText = drama.cast;
+            document.getElementById('modal-genres').innerText = drama.genres;
+            document.getElementById('modal-vibe').innerText = drama.vibe;
+
+            document.getElementById('video-player-container').classList.add('hidden');
+
+            const modal = document.getElementById('drama-modal');
+            const container = document.getElementById('modal-container');
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+        }
+
+        function selectAndOpen(index) {
+            setActiveDrama(index);
+            openModal(index);
+        }
+
+        function openActiveModal() {
+            openModal(currentIndex);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('drama-modal');
+            const container = document.getElementById('modal-container');
+
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+
+            resumeAutoplay();
+        }
+
+        document.getElementById('drama-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'drama-modal') closeModal();
+        });
+
+        function simulatePlay() {
+            const player = document.getElementById('video-player-container');
+            player.classList.remove('hidden');
+        }
+
+        // Search Filter
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.drama-card');
+
+            dramasData.forEach((drama, index) => {
+                const matches = drama.title.toLowerCase().includes(query) || 
+                                drama.cast.toLowerCase().includes(query) || 
+                                drama.genre.toLowerCase().includes(query);
+                if (cards[index]) {
+                    cards[index].style.display = matches ? 'block' : 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
